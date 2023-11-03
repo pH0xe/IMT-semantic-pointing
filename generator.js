@@ -7,7 +7,8 @@ export const generateCross = (
   translateZ,
   rotateX,
   rotateY,
-  rotateZ
+  rotateZ,
+  color = 0xffffff
 ) => {
   const depth = 0.5;
   const rear = 1 - depth;
@@ -241,7 +242,7 @@ export const generateCross = (
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
   geometry.computeVertexNormals();
 
-  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const material = new THREE.MeshStandardMaterial({ color });
 
   const mesh = new THREE.Mesh(geometry, material);
   mesh.scale.set(scale, scale, scale);
@@ -254,21 +255,27 @@ export const generateCross = (
 
 const random = (min, max) => Math.random() * (max - min) + min;
 
-export const generateCrosses = (count) => {
+export const generateCrosses = (count, godMode) => {
   const crosses = [];
   for (let i = 0; i < count; i++) {
+    const translateZ = random(-100, -10);
+    // plus on est loin plus l'intervalle x et y est grand
+    const translateX = random(-translateZ / 2, translateZ / 2);
+    const translateY = random(-translateZ / 2, translateZ / 2);
     crosses.push(
       generateCross(
-        random(0.1, 1),
-        random(-5, 5),
-        random(-5, 5),
-        random(-5, 5),
-        random(0, 360),
-        random(0, 360),
-        random(0, 360)
+        1,
+        translateX,
+        translateY,
+        translateZ,
+        0,
+        0,
+        0,
+        godMode ? 0x6c5ce7 : 0xffffff
       )
     );
   }
+
   return crosses;
 };
 

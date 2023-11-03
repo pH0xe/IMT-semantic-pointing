@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+#commands {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffffffa1;
+  padding: 1rem;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#commands h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+#commands #btn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#commands #btn-list button {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 5px #000000a1;
+  transition: all 0.2s ease-in-out;
+}
+
+#commands #btn-list button:hover {
+  background-color: #eaeaea;
+  box-shadow: none;
+}

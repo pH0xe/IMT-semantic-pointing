@@ -3,14 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <title>My first three.js app</title>
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="commands">
+      <h2>Commandes</h2>
+      <div id="btn-list">
+        <button id="btn-regenerate">Regenerer les formes</button>
+        <button id="btn-god-mode">God mode: OFF</button>
+      </div>
+    </div>
+
     <script type="module" src="/generator.js"></script>
+    <script type="module" src="/scene.js"></script>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
