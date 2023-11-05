@@ -15,7 +15,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.setClearColor("#233143");
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-const camera = new THREE.PerspectiveCamera(
+export const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
