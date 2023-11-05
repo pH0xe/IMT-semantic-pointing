@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { camera, render, scene } from "./scene.js";
+import { camera, onCursorZChange, render, scene } from "./scene.js";
 
 const cursorPosition = new THREE.Vector3();
 cursorPosition.z = -15;
@@ -39,15 +39,16 @@ const computePosition = () => {
 
 const onKeydown = (event) => {
   event.preventDefault();
-  if (event.key === "ArrowUp") {
+  if (event.key === "ArrowDown") {
     if (cursorPosition.z >= -5) return;
     cursorPosition.z += 0.5;
-  } else if (event.key === "ArrowDown") {
+  } else if (event.key === "ArrowUp") {
     if (cursorPosition.z <= -120) return;
     cursorPosition.z -= 0.5;
   }
   computePosition();
   render();
+  onCursorZChange(cursorPosition.z);
 };
 const onScroll = (event) => {
   if (event.deltaY < 0) {
@@ -59,6 +60,7 @@ const onScroll = (event) => {
   }
   computePosition();
   render();
+  onCursorZChange(cursorPosition.z);
 };
 
 const cursor = createCursor();

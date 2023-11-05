@@ -82,3 +82,25 @@ export function removeTexture() {
   render();
   return Promise.resolve();
 }
+
+export function onCursorZChange(z) {
+  const depth = 0.5;
+  const after = sceneCrosses.filter((cross) => cross.position.z < z - depth);
+  const before = sceneCrosses.filter((cross) => cross.position.z > z + depth);
+  const inCrosses = sceneCrosses.filter(
+    (cross) => cross.position.z >= z - depth && cross.position.z <= z + depth
+  );
+
+  before.forEach((cross) => {
+    cross.material.color = new THREE.Color(0x6c5ce7);
+  });
+
+  after.forEach((cross) => {
+    cross.material.color = new THREE.Color(0xffffff);
+  });
+
+  inCrosses.forEach((cross) => {
+    cross.material.color = new THREE.Color(0x00ff00);
+  });
+  render();
+}
