@@ -243,13 +243,10 @@ export const generateCross = (
   geometry.computeVertexNormals();
 
   const material = new THREE.MeshStandardMaterial({ color });
+  material.side = THREE.DoubleSide;
 
   const mesh = new THREE.Mesh(geometry, material);
-  mesh.scale.set(scale, scale, scale);
-  mesh.translateX(translateX);
-  mesh.translateY(translateY);
-  mesh.translateZ(translateZ);
-  mesh.rotation.set(rotateX, rotateY, rotateZ);
+  mesh.position.set(translateX, translateY, translateZ);
   return mesh;
 };
 

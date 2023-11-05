@@ -32,7 +32,7 @@ const computePosition = () => {
   );
   vector.unproject(camera);
   const dir = vector.sub(camera.position).normalize();
-  const distance = cursorPosition.z;
+  const distance = -cursorPosition.z / dir.z;
   const pos = camera.position.clone().add(dir.multiplyScalar(distance));
   cursor.position.set(-pos.x, -pos.y, -pos.z);
 };
