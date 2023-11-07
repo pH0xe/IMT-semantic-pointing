@@ -1,5 +1,7 @@
 import * as THREE from "three";
-import { camera, onCursorZChange, render, scene } from "./scene.js";
+import { camera, onCursorZChange, render, scene, sceneCrosses } from "./scene.js";
+
+let cursorSpeed = new THREE.Vector3();
 
 const cursorPosition = new THREE.Vector3();
 cursorPosition.z = -15;
@@ -20,9 +22,27 @@ const onMouseMove = (event) => {
   cursorPosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   computePosition();
-
   render();
 };
+
+const minDistancePerAxis = () => {
+  const distance = (cross, axis) => Math.abs(cross.position[axis] - cursorPosition[axis]);
+
+  return new THREE.Vector3(...['x', 'y', 'z'].map((axis) =>
+    sceneCrosses.reduce(
+      (minDistance, cross) => Math.min(minDistance, distance(cross, axis)),
+      Infinity,
+    ),
+  ));
+};
+
+const speedPerAxis = () => {
+  const a = new THREE.Vector3(...minDistancePerAxis()
+    .toArray()
+    .map(d => Math.abs(d))
+    .map(d => 0.1 + Math.log10(0.5 * d**2 + 1)));
+  return a;
+}
 
 const computePosition = () => {
   const vector = new THREE.Vector3(
@@ -41,27 +61,36 @@ const onKeydown = (event) => {
   event.preventDefault();
   if (event.key === "ArrowDown") {
     if (cursorPosition.z >= -5) return;
-    cursorPosition.z += 0.5;
+    cursorSpeed.z = speedPerAxis().z;
   } else if (event.key === "ArrowUp") {
     if (cursorPosition.z <= -120) return;
-    cursorPosition.z -= 0.5;
+    cursorSpeed.z = -speedPerAxis().z;
   }
-  computePosition();
-  render();
-  onCursorZChange(cursorPosition.z);
+
+  requestAnimationFrame(animateCursor);
 };
 const onScroll = (event) => {
   if (event.deltaY < 0) {
     if (cursorPosition.z <= -120) return;
-    cursorPosition.z -= 0.5;
+    cursorSpeed.z = -speedPerAxis().z;
   } else {
     if (cursorPosition.z >= -5) return;
-    cursorPosition.z += 0.5;
+    cursorSpeed.z = speedPerAxis().z;
   }
-  computePosition();
-  render();
-  onCursorZChange(cursorPosition.z);
+
+  requestAnimationFrame(animateCursor);
 };
+
+const animateCursor = () => {
+  cursorPosition.add(cursorSpeed);
+
+  computePosition();
+
+  if (cursorSpeed.z !== 0)
+    onCursorZChange(cursorPosition.z);
+
+  cursorSpeed = new THREE.Vector3();
+}
 
 const cursor = createCursor();
 window.addEventListener("mousemove", onMouseMove.bind(this));
