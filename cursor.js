@@ -1,6 +1,17 @@
 import * as THREE from "three";
 import { camera, onCursorZChange, render, scene, sceneCrosses } from "./scene.js";
 
+// To test parameters
+// https://www.geogebra.org/calculator/znz4mzve
+const minSpeed = 0.1;
+const curveFlateness = 2.7;
+const gapShape = 1;
+const gapWidth = 1;
+
+const speed = (distance) => {
+  return minSpeed + Math.log(1 + Math.abs(distance)**(2 * gapShape) / gapWidth) / Math.log(10 ** curveFlateness);
+}
+
 let cursorSpeed = new THREE.Vector3();
 
 const cursorPosition = new THREE.Vector3();
@@ -37,11 +48,7 @@ const minDistancePerAxis = () => {
 };
 
 const speedPerAxis = () => {
-  const a = new THREE.Vector3(...minDistancePerAxis()
-    .toArray()
-    .map(d => Math.abs(d))
-    .map(d => 0.1 + Math.log10(0.5 * d**2 + 1)));
-  return a;
+  return new THREE.Vector3(...minDistancePerAxis().toArray().map(speed));
 }
 
 const computePosition = () => {
