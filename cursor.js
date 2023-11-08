@@ -9,7 +9,7 @@ const gapShape = 1;
 const gapWidth = 1;
 
 const speed = (distance) => {
-  return minSpeed + Math.log(1 + Math.abs(distance)**(2 * gapShape) / gapWidth) / Math.log(10 ** curveFlateness);
+  return minSpeed + Math.log(1 + distance**(2 * gapShape) / gapWidth) / Math.log(10 ** curveFlateness);
 }
 
 let cursorSpeed = new THREE.Vector3();
