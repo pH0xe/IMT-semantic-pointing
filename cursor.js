@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { camera, onCursorZChange, render, scene, sceneCrosses } from "./scene.js";
+import { camera, onCursorZChange, render, sceneCrosses } from "./scene.js";
 
 // To test parameters
 // https://www.geogebra.org/calculator/znz4mzve
@@ -8,9 +8,24 @@ const curveFlateness = 2.7;
 const gapShape = 1;
 const gapWidth = 1;
 
+let cursor;
+
+let gamepadIndex;
+
+const AXE_X_1 = 0;
+const AXE_Y = 1;
+const AXE_X_2 = 2;
+const AXE_Z = 3;
+
+const axe_min = 0.1;
+
 const speed = (distance) => {
-  return minSpeed + Math.log(1 + distance**(2 * gapShape) / gapWidth) / Math.log(10 ** curveFlateness);
-}
+  return (
+    minSpeed +
+    Math.log(1 + distance ** (2 * gapShape) / gapWidth) /
+      Math.log(10 ** curveFlateness)
+  );
+};
 
 let cursorSpeed = new THREE.Vector3();
 
@@ -18,12 +33,12 @@ const cursorPosition = new THREE.Vector3();
 cursorPosition.z = -15;
 
 // cursor will be a pyramid, add it to the scene
-const createCursor = () => {
+export const createCursor = () => {
   const geometry = new THREE.ConeGeometry(1, 3, 4);
   const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-  const cursor = new THREE.Mesh(geometry, material);
-  cursor.position.set(cursorPosition.x, cursorPosition.y, cursorPosition.z);
-  scene.add(cursor);
+  const newCursor = new THREE.Mesh(geometry, material);
+  newCursor.position.set(cursorPosition.x, cursorPosition.y, cursorPosition.z);
+  cursor = newCursor;
   return cursor;
 };
 
@@ -37,19 +52,39 @@ const onMouseMove = (event) => {
 };
 
 const minDistancePerAxis = () => {
-  const distance = (cross, axis) => Math.abs(cross.position[axis] - cursorPosition[axis]);
+  const distance = (cross, axis) =>
+    Math.abs(cross.position[axis] - cursorPosition[axis]);
 
-  return new THREE.Vector3(...['x', 'y', 'z'].map((axis) =>
-    sceneCrosses.reduce(
-      (minDistance, cross) => Math.min(minDistance, distance(cross, axis)),
-      Infinity,
-    ),
-  ));
+  return new THREE.Vector3(
+    ...["x", "y", "z"].map((axis) =>
+      sceneCrosses.reduce(
+        (minDistance, cross) => Math.min(minDistance, distance(cross, axis)),
+        Infinity
+      )
+    )
+  );
 };
 
 const speedPerAxis = () => {
-  return new THREE.Vector3(...minDistancePerAxis().toArray().map(speed));
-}
+  const s = speed(minDistance());
+  return new THREE.Vector3(s, s, s);
+};
+
+const distance2points = (v1, v2) => {
+  const dx = v1.x - v2.x;
+  const dy = v1.y - v2.y;
+  const dz = v1.z - v2.z;
+  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+};
+
+const minDistance = () => {
+  const distances = sceneCrosses.map((c) =>
+    distance2points(c.position, cursorPosition)
+  );
+  return distances.reduce((minDistance, distance) =>
+    Math.min(minDistance, distance)
+  );
+};
 
 const computePosition = () => {
   const vector = new THREE.Vector3(
@@ -93,13 +128,55 @@ const animateCursor = () => {
 
   computePosition();
 
-  if (cursorSpeed.z !== 0)
-    onCursorZChange(cursorPosition.z);
+  if (cursorSpeed.z !== 0) onCursorZChange(cursorPosition.z);
 
   cursorSpeed = new THREE.Vector3();
-}
+};
 
-const cursor = createCursor();
+const onGamepadConnected = (event) => {
+  gamepadIndex = event.gamepad.index;
+};
+
+const onGamepadDisconnected = (event) => {
+  gamepadIndex = null;
+};
+
+export const gamepadLoop = () => {
+  const gamepads = navigator.getGamepads
+    ? navigator.getGamepads()
+    : navigator.webkitGetGamepads
+    ? navigator.webkitGetGamepads()
+    : [];
+
+  /** @type {Gamepad | null} */
+  const gamepad = gamepads[gamepadIndex];
+  if (!gamepad) return;
+
+  if (
+    updateGamepadAxes(gamepad.axes[AXE_X_1], "x") |
+    updateGamepadAxes(-gamepad.axes[AXE_Y], "y") |
+    updateGamepadAxes(gamepad.axes[AXE_Z], "z")
+  ) {
+    cursor.position.set(cursorPosition.x, cursorPosition.y, cursorPosition.z);
+    // console.log(cursorPosition);
+    render();
+  }
+};
+
+const updateGamepadAxes = (axe, cursorCoord) => {
+  if (Math.abs(axe) - axe_min > 0) {
+    cursorPosition[cursorCoord] += speedPerAxis()[cursorCoord] * axe;
+    if (cursorCoord === "z") onCursorZChange(cursorPosition.z);
+    return true;
+  }
+  return false;
+};
+
 window.addEventListener("mousemove", onMouseMove.bind(this));
 window.addEventListener("keydown", onKeydown.bind(this));
 window.addEventListener("wheel", onScroll.bind(this));
+window.addEventListener("gamepadconnected", onGamepadConnected.bind(this));
+window.addEventListener(
+  "gamepaddisconnected",
+  onGamepadDisconnected.bind(this)
+);

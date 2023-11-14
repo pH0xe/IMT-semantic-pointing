@@ -1,9 +1,7 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { generateCrosses } from "./generator";
-
-const width = window.innerWidth,
-  height = window.innerHeight;
+import { createCursor, gamepadLoop } from "./cursor";
 
 export let sceneCrosses = [];
 export const scene = new THREE.Scene();
@@ -14,7 +12,6 @@ renderer.toneMappingExposure = 1;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.setClearColor("#233143");
 renderer.setSize(window.innerWidth, window.innerHeight);
-
 export const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -104,3 +101,11 @@ export function onCursorZChange(z) {
   });
   render();
 }
+
+scene.add(createCursor());
+
+const animate = () => {
+  gamepadLoop();
+  render();
+};
+renderer.setAnimationLoop(animate);
