@@ -74,7 +74,7 @@ const distance2points = (v1, v2) => {
   const dx = v1.x - v2.x;
   const dy = v1.y - v2.y;
   const dz = v1.z - v2.z;
-  return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  return Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2);
 };
 
 const minDistance = () => {
