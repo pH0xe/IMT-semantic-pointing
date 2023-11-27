@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import { createCursor, gamepadLoop } from "./cursor_bak";
 import { generateCrosses } from "./generator";
-import { createCursor, gamepadLoop } from "./cursor";
 
 export let sceneCrosses = [];
 export const scene = new THREE.Scene();
