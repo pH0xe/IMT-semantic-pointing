@@ -1,6 +1,7 @@
 import { Cross } from "./Cross";
 import { Cursor } from "./Cursor";
 import { GamepadSemantics } from "./GamepadSemantics";
+import { Keyboard } from "./Keyboard";
 import { Scene } from "./Scene";
 import * as THREE from "three";
 
@@ -60,6 +61,7 @@ export class Utils {
 
   static animate() {
     GamepadSemantics.instance.loop();
+    Keyboard.instance.loop();
     Scene.instance.render();
   }
 
@@ -101,6 +103,13 @@ export class Utils {
       GamepadSemantics.instance.onGamepadDisconnected.bind(
         GamepadSemantics.instance
       )
+    );
+
+    // init Keyboard listeners (backup if no gamepad)
+    window.addEventListener(
+      "keydown",
+      Keyboard.instance.onKeyPress.bind(Keyboard.instance),
+      true
     );
   }
 }
