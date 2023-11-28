@@ -14,7 +14,7 @@ export class GamepadSemantics {
 
   static AXE_X = 0;
   static AXE_Y = 1;
-  static AXE_Z = 3;
+  static AXE_Z = 4;
   static AXE_THRESOLD = 0.1;
 
   /** @type {number | null} */
@@ -61,15 +61,11 @@ export class GamepadSemantics {
       (axesValues.y != null) |
       (axesValues.z != null)
     ) {
-      const crosses = Scene.instance.crosses;
-      const distances = crosses.map((cross) =>
-        cross.getDistance(Cursor.instance.cursor.position)
-      );
-      const speed = Utils.getSpeed(distances);
+      const speed = Utils.speedPerAxis();
       Cursor.instance.translateCursor(
-        axesValues.x * speed,
-        axesValues.y * speed,
-        axesValues.z * speed
+        axesValues.x * speed.x,
+        axesValues.y * speed.y,
+        axesValues.z * speed.z,
       );
       if (axesValues.z != null) {
         Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);

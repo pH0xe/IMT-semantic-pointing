@@ -1,4 +1,5 @@
 import { Cross } from "./Cross";
+import { Cursor } from "./Cursor";
 import { GamepadSemantics } from "./GamepadSemantics";
 import { Scene } from "./Scene";
 import * as THREE from "three";
@@ -11,17 +12,32 @@ export class Utils {
   // To test parameters
   // https://www.geogebra.org/calculator/znz4mzve
   static minSpeed = 0.1;
-  static curveFlateness = 2.7;
+  static curveFlateness = 5;
   static gapShape = 1;
-  static gapWidth = 1;
-  static getSpeed(distances) {
-    const minDistance = Math.min(...distances);
+  static gapWidth = 2;
+
+  static speed(distance) {
     return (
       Utils.minSpeed +
-      Math.log(1 + minDistance ** (2 * Utils.gapShape) / Utils.gapWidth) /
+      Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
         Math.log(10 ** Utils.curveFlateness)
     );
-  }
+  };
+
+  static minDistance() {
+    const distances = Scene.instance.crosses.map(cross => cross.position.clone().sub(Cursor.instance.cursor.position));
+    return distances.reduce(
+      (minDistance, distance) => distance.length() < minDistance.length() ? distance : minDistance,
+      new THREE.Vector3(Infinity, Infinity, Infinity),
+    );
+  };
+
+
+  static speedPerAxis() {
+    const s = Utils.speed(Utils.minDistance());
+    return new THREE.Vector3(...Utils.minDistance().toArray().map(distance => Utils.speed(distance)));
+  };
+
 
   /**
    * @param {number} count
