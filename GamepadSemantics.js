@@ -14,7 +14,7 @@ export class GamepadSemantics {
 
   static AXE_X = 0;
   static AXE_Y = 1;
-  static AXE_Z = 4;
+  static AXE_Z = 3;
   static AXE_THRESOLD = 0.1;
 
   /** @type {number | null} */
