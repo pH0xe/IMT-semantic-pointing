@@ -86,6 +86,17 @@ export class Utils {
     const btnClose = document.getElementById("btn-close");
     btnClose.addEventListener("click", Utils.toggleCommandsVisibility);
 
+    const btnTitoubiz = document.getElementById("btn-titoubiz");
+    btnTitoubiz.addEventListener("click", () => {
+      alert("Je suis une brique !!!!!!");
+    });
+
+    const btnSwitchAxe = document.getElementById("btn-axez");
+    btnSwitchAxe.addEventListener(
+      "click",
+      GamepadSemantics.instance.switchAxe.bind(GamepadSemantics.instance)
+    );
+
     window.addEventListener(
       "resize",
       Scene.instance.onWindowResize.bind(Scene.instance)

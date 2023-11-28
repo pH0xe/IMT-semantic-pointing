@@ -48,6 +48,14 @@ export class GamepadSemantics {
     this.gamepadIndex = null;
   }
 
+  switchAxeZ() {
+    if (GamepadSemantics.AXE_Z === 3) {
+      GamepadSemantics.AXE_Z = 4;
+    } else {
+      GamepadSemantics.AXE_Z = 3;
+    }
+  }
+
   /**
    * Called by the main loop
    * Fetch axes values and update the cursor position

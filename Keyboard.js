@@ -27,6 +27,8 @@ export class Keyboard {
   static FORWARD = "e";
   static BACKWARD = "a";
 
+  static DEFAULT_SPEED = 0.5;
+
   onKeyPress(event) {
     const key = event.key;
     switch (key) {
@@ -59,9 +61,9 @@ export class Keyboard {
       );
       const speed = Utils.getSpeed(distances);
       Cursor.instance.translateCursor(
-        this._events.x * speed,
-        this._events.y * speed,
-        this._events.z * speed
+        this._events.x * Keyboard.DEFAULT_SPEED * speed,
+        this._events.y * Keyboard.DEFAULT_SPEED * speed,
+        this._events.z * Keyboard.DEFAULT_SPEED * speed
       );
       if (this._events.z != null) {
         Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);
