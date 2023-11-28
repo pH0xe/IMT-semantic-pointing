@@ -1,6 +1,7 @@
 import { Cross } from "./Cross";
 import { Cursor } from "./Cursor";
 import { GamepadSemantics } from "./GamepadSemantics";
+import { Keyboard } from "./Keyboard";
 import { Scene } from "./Scene";
 import * as THREE from "three";
 
@@ -22,22 +23,26 @@ export class Utils {
       Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
         Math.log(10 ** Utils.curveFlateness)
     );
-  };
+  }
 
   static minDistance() {
-    const distances = Scene.instance.crosses.map(cross => cross.position.clone().sub(Cursor.instance.cursor.position));
-    return distances.reduce(
-      (minDistance, distance) => distance.length() < minDistance.length() ? distance : minDistance,
-      new THREE.Vector3(Infinity, Infinity, Infinity),
+    const distances = Scene.instance.crosses.map((cross) =>
+      cross.position.clone().sub(Cursor.instance.cursor.position)
     );
-  };
-
+    return distances.reduce(
+      (minDistance, distance) =>
+        distance.length() < minDistance.length() ? distance : minDistance,
+      new THREE.Vector3(Infinity, Infinity, Infinity)
+    );
+  }
 
   static speedPerAxis() {
-    const s = Utils.speed(Utils.minDistance());
-    return new THREE.Vector3(...Utils.minDistance().toArray().map(distance => Utils.speed(distance)));
-  };
-
+    return new THREE.Vector3(
+      ...Utils.minDistance()
+        .toArray()
+        .map((distance) => Utils.speed(distance))
+    );
+  }
 
   /**
    * @param {number} count
@@ -60,6 +65,7 @@ export class Utils {
 
   static animate() {
     GamepadSemantics.instance.loop();
+    Keyboard.instance.loop();
     Scene.instance.render();
   }
 
@@ -84,6 +90,17 @@ export class Utils {
     const btnClose = document.getElementById("btn-close");
     btnClose.addEventListener("click", Utils.toggleCommandsVisibility);
 
+    const btnTitoubiz = document.getElementById("btn-titoubiz");
+    btnTitoubiz.addEventListener("click", () => {
+      alert("Je suis une brique !!!!!!");
+    });
+
+    const btnSwitchAxe = document.getElementById("btn-axez");
+    btnSwitchAxe.addEventListener(
+      "click",
+      GamepadSemantics.instance.switchAxeZ.bind(GamepadSemantics.instance)
+    );
+
     window.addEventListener(
       "resize",
       Scene.instance.onWindowResize.bind(Scene.instance)
@@ -101,6 +118,13 @@ export class Utils {
       GamepadSemantics.instance.onGamepadDisconnected.bind(
         GamepadSemantics.instance
       )
+    );
+
+    // init Keyboard listeners (backup if no gamepad)
+    window.addEventListener(
+      "keydown",
+      Keyboard.instance.onKeyPress.bind(Keyboard.instance),
+      true
     );
   }
 }
