@@ -23,22 +23,26 @@ export class Utils {
       Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
         Math.log(10 ** Utils.curveFlateness)
     );
-  };
+  }
 
   static minDistance() {
-    const distances = Scene.instance.crosses.map(cross => cross.position.clone().sub(Cursor.instance.cursor.position));
-    return distances.reduce(
-      (minDistance, distance) => distance.length() < minDistance.length() ? distance : minDistance,
-      new THREE.Vector3(Infinity, Infinity, Infinity),
+    const distances = Scene.instance.crosses.map((cross) =>
+      cross.position.clone().sub(Cursor.instance.cursor.position)
     );
-  };
-
+    return distances.reduce(
+      (minDistance, distance) =>
+        distance.length() < minDistance.length() ? distance : minDistance,
+      new THREE.Vector3(Infinity, Infinity, Infinity)
+    );
+  }
 
   static speedPerAxis() {
-    const s = Utils.speed(Utils.minDistance());
-    return new THREE.Vector3(...Utils.minDistance().toArray().map(distance => Utils.speed(distance)));
-  };
-
+    return new THREE.Vector3(
+      ...Utils.minDistance()
+        .toArray()
+        .map((distance) => Utils.speed(distance))
+    );
+  }
 
   /**
    * @param {number} count
@@ -94,7 +98,7 @@ export class Utils {
     const btnSwitchAxe = document.getElementById("btn-axez");
     btnSwitchAxe.addEventListener(
       "click",
-      GamepadSemantics.instance.switchAxe.bind(GamepadSemantics.instance)
+      GamepadSemantics.instance.switchAxeZ.bind(GamepadSemantics.instance)
     );
 
     window.addEventListener(

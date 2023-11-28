@@ -59,11 +59,11 @@ export class Keyboard {
       const distances = crosses.map((cross) =>
         cross.getDistance(Cursor.instance.cursor.position)
       );
-      const speed = Utils.getSpeed(distances);
+      const speed = Utils.speedPerAxis(distances);
       Cursor.instance.translateCursor(
-        this._events.x * Keyboard.DEFAULT_SPEED * speed,
-        this._events.y * Keyboard.DEFAULT_SPEED * speed,
-        this._events.z * Keyboard.DEFAULT_SPEED * speed
+        this._events.x * Keyboard.DEFAULT_SPEED * speed.x,
+        this._events.y * Keyboard.DEFAULT_SPEED * speed.y,
+        this._events.z * Keyboard.DEFAULT_SPEED * speed.z
       );
       if (this._events.z != null) {
         Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);

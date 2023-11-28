@@ -70,10 +70,11 @@ export class GamepadSemantics {
       (axesValues.z != null)
     ) {
       const speed = Utils.speedPerAxis();
+
       Cursor.instance.translateCursor(
         axesValues.x * speed.x,
         axesValues.y * speed.y,
-        axesValues.z * speed.z,
+        axesValues.z * speed.z
       );
       if (axesValues.z != null) {
         Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);
@@ -87,9 +88,9 @@ export class GamepadSemantics {
   getAxesValues() {
     if (!this.gamepad) return {};
     return {
-      x: this.getAxeValue(GamepadSemantics.AXE_X),
-      y: -this.getAxeValue(GamepadSemantics.AXE_Y),
-      z: this.getAxeValue(GamepadSemantics.AXE_Z),
+      x: this.getAxeValue(GamepadSemantics.AXE_X) || 0,
+      y: -this.getAxeValue(GamepadSemantics.AXE_Y) || 0,
+      z: this.getAxeValue(GamepadSemantics.AXE_Z) || 0,
     };
   }
 
