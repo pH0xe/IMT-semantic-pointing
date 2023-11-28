@@ -79,7 +79,7 @@ export class Scene {
   }
 
   _removeCrosses() {
-    this.scene.remove(...this.crosses);
+    this.scene.remove(...this.crosses.map((cross) => cross.mesh));
     this.crosses = [];
   }
 
