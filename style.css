@@ -12,6 +12,7 @@ body {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   cursor: default;
+  width: 15%;
 }
 
 #commands.minimized {
@@ -78,7 +79,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  aspect-ratio: 1/1;
+  height: 50px;
   width: 50px;
   padding: 0.5rem;
   margin: 0.5rem;

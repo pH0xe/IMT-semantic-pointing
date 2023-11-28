@@ -1,4 +1,8 @@
-class GamepadSemantics {
+import { Scene } from "./Scene";
+import { Utils } from "./Utils";
+import { Cursor } from "./Cursor";
+
+export class GamepadSemantics {
   _instance;
 
   static get instance() {
@@ -10,7 +14,7 @@ class GamepadSemantics {
 
   static AXE_X = 0;
   static AXE_Y = 1;
-  static AXE_Z = 2;
+  static AXE_Z = 3;
   static AXE_THRESOLD = 0.1;
 
   /** @type {number | null} */
@@ -18,7 +22,7 @@ class GamepadSemantics {
 
   /**
    * Required due to Chrome that does not update the gamepad object
-   * @type {(Gamepad | null)[]}
+   * @type {(GamepadSemantics | null)[]}
    */
   get gamepads() {
     let gamepads = [];
@@ -50,6 +54,27 @@ class GamepadSemantics {
    */
   loop() {
     if (!this.gamepad) return;
+
+    const axesValues = this.getAxesValues();
+    if (
+      (axesValues.x != null) |
+      (axesValues.y != null) |
+      (axesValues.z != null)
+    ) {
+      const crosses = Scene.instance.crosses;
+      const distances = crosses.map((cross) =>
+        cross.getDistance(Cursor.instance.cursor.position)
+      );
+      const speed = Utils.getSpeed(distances);
+      Cursor.instance.translateCursor(
+        axesValues.x * speed,
+        axesValues.y * speed,
+        axesValues.z * speed
+      );
+      if (axesValues.z != null) {
+        Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);
+      }
+    }
   }
 
   /**
@@ -58,9 +83,9 @@ class GamepadSemantics {
   getAxesValues() {
     if (!this.gamepad) return {};
     return {
-      x: this.getAxeValue(Gamepad.AXE_X),
-      y: this.getAxeValue(Gamepad.AXE_Y),
-      z: this.getAxeValue(Gamepad.AXE_Z),
+      x: this.getAxeValue(GamepadSemantics.AXE_X),
+      y: -this.getAxeValue(GamepadSemantics.AXE_Y),
+      z: this.getAxeValue(GamepadSemantics.AXE_Z),
     };
   }
 
@@ -73,7 +98,9 @@ class GamepadSemantics {
   getAxeValue(axeIndex) {
     if (!this.gamepad) return null;
     const axeValue = this.gamepad.axes[axeIndex];
-    if (Math.abs(axeValue) < Gamepad.AXE_THRESOLD) return null;
-    return axeValue - Gamepad.AXE_THRESOLD;
+    if (Math.abs(axeValue) < GamepadSemantics.AXE_THRESOLD) {
+      return null;
+    }
+    return axeValue - GamepadSemantics.AXE_THRESOLD;
   }
 }

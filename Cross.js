@@ -39,11 +39,11 @@ export class Cross {
   ];
 
   static FRONT_CROSS_COORDS = Cross.CROSS_COORDS.flatMap((t) =>
-    t.flatMap((p) => [...p, rear])
+    t.flatMap((p) => [...p, Cross.REAR])
   );
 
   static BACK_CROSS_COORDS = Cross.CROSS_COORDS.flatMap((t) =>
-    t.flatMap((p) => [...p, front])
+    t.flatMap((p) => [...p, Cross.FRONT])
   );
 
   /** @type {THREE.Mesh} */
@@ -63,13 +63,14 @@ export class Cross {
     const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(translate.x, translate.y, translate.z);
+    this.mesh.geometry.computeBoundingBox();
   }
 
   /** @returns {Float32Array} */
   computeVertices() {
     return new Float32Array([
-      ...FRONT_CROSS_COORDS,
-      ...BACK_CROSS_COORDS,
+      ...Cross.FRONT_CROSS_COORDS,
+      ...Cross.BACK_CROSS_COORDS,
       ...[...[3, 4, Cross.REAR], ...[3, 1, Cross.FRONT], ...[3, 1, Cross.REAR]],
       ...[
         ...[3, 4, Cross.REAR],
@@ -149,8 +150,12 @@ export class Cross {
    * return the coordinates of the center of the cross (not just the position of the mesh), using a bounding box
    */
   get position() {
-    const center = THREE.Vector3();
-    this.mesh.geometry.boundingBox.getCenter();
+    const center = new THREE.Vector3();
+    const localCenter = new THREE.Vector3();
+    const boundingBox = this.mesh.geometry.boundingBox;
+    localCenter.x = (boundingBox.max.x + boundingBox.min.x) / 2;
+    localCenter.y = (boundingBox.max.y + boundingBox.min.y) / 2;
+    localCenter.z = (boundingBox.max.z + boundingBox.min.z) / 2;
     this.mesh.localToWorld(center);
     return center;
   }

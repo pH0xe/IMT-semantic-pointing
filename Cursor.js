@@ -1,16 +1,16 @@
-import * as Three from "three";
+import * as THREE from "three";
 
 /**
  * It is a singleton. Use Cursor.instance to access it.
  *
  * @typedef Cursor
- * @property {Three.Mesh} cursor
- * @property {Three.Vector3} cursorSpeed
- * @property {Three.Vector3} cursorPosition
+ * @property {THREE.Mesh} cursor
  */
 export class Cursor {
+  /** @type {Cursor} */
   _instance;
 
+  /** @type {Cursor} */
   static get instance() {
     if (!this._instance) {
       this._instance = new Cursor();
@@ -18,17 +18,12 @@ export class Cursor {
     return this._instance;
   }
 
-  /** @type {Three.Mesh} */
+  /** @type {THREE.Mesh} */
   cursor;
 
-  /** @type {Three.Vector3} */
-  cursorSpeed;
-
-  static INITIAL_CURSOR_POSITION = new Three.Vector3(0, 0, -15);
+  static INITIAL_CURSOR_POSITION = new THREE.Vector3(0, 0, -15);
 
   constructor() {
-    this.cursorSpeed = new Three.Vector3();
-    this.cursorPosition = new Three.Vector3();
     this.initCursor();
   }
 
@@ -50,5 +45,16 @@ export class Cursor {
    */
   updateCursorPosition(x, y, z) {
     this.cursor.position.set(x, y, z);
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {number} z
+   */
+  translateCursor(x, y, z) {
+    this.cursor.position.x += x;
+    this.cursor.position.y += y;
+    this.cursor.position.z += z;
   }
 }
