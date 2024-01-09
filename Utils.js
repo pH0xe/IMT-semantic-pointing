@@ -10,19 +10,26 @@ export class Utils {
     return Math.random() * (max - min) + min;
   }
 
+  static semanticPointigEnabled = true;
+  static defaultSpeed = 0.1;
+
   // To test parameters
   // https://www.geogebra.org/calculator/znz4mzve
-  static minSpeed = 0.1;
-  static curveFlateness = 5;
+  static minSpeed = 0.02;
+  static curveFlateness = 15;
   static gapShape = 1;
-  static gapWidth = 2;
+  static gapWidth = 1;
 
   static speed(distance) {
-    return (
-      Utils.minSpeed +
-      Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
-        Math.log(10 ** Utils.curveFlateness)
-    );
+    if (this.semanticPointigEnabled) {
+      return (
+        Utils.minSpeed +
+        Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
+          Math.log(10 ** Utils.curveFlateness)
+      );
+    } else {
+      return this.defaultSpeed;
+    }
   }
 
   static minDistance() {
@@ -89,6 +96,11 @@ export class Utils {
 
     const btnClose = document.getElementById("btn-close");
     btnClose.addEventListener("click", Utils.toggleCommandsVisibility);
+
+    const btnSemanticPointig = document.getElementById("checkbox-semantic-pointing");
+    btnSemanticPointig.addEventListener("change", () => {
+      this.semanticPointigEnabled = btnSemanticPointig.checked;
+    });
 
     const btnTitoubiz = document.getElementById("btn-titoubiz");
     btnTitoubiz.addEventListener("click", () => {
