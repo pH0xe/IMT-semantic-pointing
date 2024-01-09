@@ -60,12 +60,12 @@ export class Keyboard {
         cross.getDistance(Cursor.instance.cursor.position)
       );
       const speed = Utils.speedPerAxis(distances);
-      Cursor.instance.translateCursor(
+      const moved = Cursor.instance.translateCursor(
         this._events.x * Keyboard.DEFAULT_SPEED * speed.x,
         this._events.y * Keyboard.DEFAULT_SPEED * speed.y,
         this._events.z * Keyboard.DEFAULT_SPEED * speed.z
       );
-      if (this._events.z != null) {
+      if (moved && this._events.z != null) {
         Scene.instance.onCursorPositionChange(Cursor.instance.centerPosition);
       }
       this._events.x = 0;
