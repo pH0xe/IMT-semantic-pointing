@@ -60,7 +60,10 @@ export class Cross {
     geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
     geometry.computeVertexNormals();
 
-    const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      transparent: true,
+    });
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(translate.x, translate.y, translate.z);
     this.mesh.geometry.computeBoundingBox();
@@ -150,14 +153,15 @@ export class Cross {
    * return the coordinates of the center of the cross (not just the position of the mesh), using a bounding box
    */
   get position() {
-    const center = new THREE.Vector3();
     const localCenter = new THREE.Vector3();
     const boundingBox = this.mesh.geometry.boundingBox;
     localCenter.x = (boundingBox.max.x + boundingBox.min.x) / 2;
     localCenter.y = (boundingBox.max.y + boundingBox.min.y) / 2;
     localCenter.z = (boundingBox.max.z + boundingBox.min.z) / 2;
-    this.mesh.localToWorld(center);
-    return center;
+    console.log(localCenter);
+    this.mesh.localToWorld(localCenter);
+    console.log(localCenter);
+    return localCenter;
   }
 
   /**
@@ -183,5 +187,54 @@ export class Cross {
       );
     }
     return crosses;
+  }
+
+  /**
+   * @param {THREE.Vector3} point
+   * @returns {-1 | 0 | 1} -1 if point is before, 0 if point is inside, 1 if point is after
+   */
+  filterZ(point) {
+    const boundingBox = this.mesh.geometry.boundingBox;
+    const depth = (boundingBox.max.z + boundingBox.min.z) / 2;
+    const maxZ = this.position.z + depth;
+    const minZ = this.position.z - depth;
+
+    if (point.z < minZ) {
+      return -1;
+    } else if (point.z > maxZ) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * @param {THREE.Vector3} point
+   */
+  isOnSameZ(point) {
+    return this.filterZ(point) === 0;
+  }
+
+  /**
+   * @param {THREE.Vector3} point
+   */
+  isInside(point) {
+    const boundingBox = this.mesh.geometry.boundingBox;
+    const height = (boundingBox.max.y + boundingBox.min.y) / 2;
+    const width = (boundingBox.max.x + boundingBox.min.x) / 2;
+
+    const maxX = this.position.x + width;
+    const minX = this.position.x - width;
+
+    const maxY = this.position.y + height;
+    const minY = this.position.y - height;
+
+    return (
+      point.x <= maxX &&
+      point.x >= minX &&
+      point.y <= maxY &&
+      point.y >= minY &&
+      this.isOnSameZ(point)
+    );
   }
 }
