@@ -93,3 +93,7 @@ body {
 #btn-open.hidden {
   display: none;
 }
+
+#label-semantic-pointing {
+  text-align: center;
+}
