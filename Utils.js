@@ -1,13 +1,27 @@
+import * as THREE from "three";
 import { Cross } from "./Cross";
 import { Cursor } from "./Cursor";
 import { GamepadSemantics } from "./GamepadSemantics";
 import { Keyboard } from "./Keyboard";
 import { Scene } from "./Scene";
-import * as THREE from "three";
 
 export class Utils {
   static random(min, max) {
     return Math.random() * (max - min) + min;
+  }
+
+  /**
+   * @param {THREE.Vector3} point
+   */
+  static isOnScreen(point) {
+    const frustum = new THREE.Frustum();
+    frustum.setFromProjectionMatrix(
+      new THREE.Matrix4().multiplyMatrices(
+        Scene.instance.camera.projectionMatrix,
+        Scene.instance.camera.matrixWorldInverse
+      )
+    );
+    return frustum.containsPoint(point);
   }
 
   static semanticPointigEnabled = true;
@@ -97,7 +111,9 @@ export class Utils {
     const btnClose = document.getElementById("btn-close");
     btnClose.addEventListener("click", Utils.toggleCommandsVisibility);
 
-    const btnSemanticPointig = document.getElementById("checkbox-semantic-pointing");
+    const btnSemanticPointig = document.getElementById(
+      "checkbox-semantic-pointing"
+    );
     btnSemanticPointig.addEventListener("change", () => {
       this.semanticPointigEnabled = btnSemanticPointig.checked;
     });

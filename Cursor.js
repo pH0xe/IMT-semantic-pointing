@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Utils } from "./Utils";
 
 /**
  * It is a singleton. Use Cursor.instance to access it.
@@ -55,7 +56,12 @@ export class Cursor {
    * @param {number} z New z position
    */
   updateCursorPosition(x, y, z) {
-    this.cursor.position.set(x, y, z);
+    const newPosition = new THREE.Vector3(x, y, z);
+    if (Utils.isOnScreen(newPosition)) {
+      this.cursor.position.set(x, y, z);
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -64,8 +70,16 @@ export class Cursor {
    * @param {number} z
    */
   translateCursor(x, y, z) {
-    this.cursor.position.x += x;
-    this.cursor.position.y += y;
-    this.cursor.position.z += z;
+    const newPosition = this.cursor.position.clone();
+    newPosition.x += x;
+    newPosition.y += y;
+    newPosition.z += z;
+    if (Utils.isOnScreen(newPosition)) {
+      this.cursor.position.x += x;
+      this.cursor.position.y += y;
+      this.cursor.position.z += z;
+      return true;
+    }
+    return false;
   }
 }

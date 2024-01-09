@@ -71,12 +71,12 @@ export class GamepadSemantics {
     ) {
       const speed = Utils.speedPerAxis();
 
-      Cursor.instance.translateCursor(
+      const moved = Cursor.instance.translateCursor(
         axesValues.x * speed.x,
         axesValues.y * speed.y,
         axesValues.z * speed.z
       );
-      if (axesValues.z != null) {
+      if (moved && axesValues.z != null) {
         Scene.instance.onCursorPositionChange(Cursor.instance.centerPosition);
       }
     }
