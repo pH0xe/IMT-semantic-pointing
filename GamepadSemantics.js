@@ -1,6 +1,6 @@
+import { Cursor } from "./Cursor";
 import { Scene } from "./Scene";
 import { Utils } from "./Utils";
-import { Cursor } from "./Cursor";
 
 export class GamepadSemantics {
   _instance;
@@ -77,7 +77,7 @@ export class GamepadSemantics {
         axesValues.z * speed.z
       );
       if (axesValues.z != null) {
-        Scene.instance.onCursorZChange(Cursor.instance.cursor.position.z);
+        Scene.instance.onCursorPositionChange(Cursor.instance.centerPosition);
       }
     }
   }

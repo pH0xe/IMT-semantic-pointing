@@ -27,6 +27,17 @@ export class Cursor {
     this.initCursor();
   }
 
+  get centerPosition() {
+    this.cursor.geometry.computeBoundingBox();
+    const boundingBox = this.cursor.geometry.boundingBox;
+    const center = new THREE.Vector3();
+    center.x = (boundingBox.max.x + boundingBox.min.x) / 2;
+    center.y = (boundingBox.max.y + boundingBox.min.y) / 2;
+    center.z = (boundingBox.max.z + boundingBox.min.z) / 2;
+    this.cursor.localToWorld(center);
+    return center;
+  }
+
   initCursor() {
     const geometry = new THREE.ConeGeometry(1, 3, 4);
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });

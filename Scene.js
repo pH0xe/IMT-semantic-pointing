@@ -96,24 +96,27 @@ export class Scene {
     this._addCrosses(Utils.generateCrosses(10));
   }
 
-  onCursorZChange(z) {
-    const depth = Cross.DEPTH;
-    const after = this.crosses.filter((cross) => cross.position.z < z - depth);
-    const before = this.crosses.filter((cross) => cross.position.z > z + depth);
-    const inCrosses = this.crosses.filter(
-      (cross) => cross.position.z >= z - depth && cross.position.z <= z + depth
-    );
+  /**
+   * @param {THREE.Vector3} point
+   */
+  onCursorPositionChange(point) {
+    const after = this.crosses.filter((cross) => cross.filterZ(point) == 1);
+    const before = this.crosses.filter((cross) => cross.filterZ(point) == -1);
+    const inCrosses = this.crosses.filter((cross) => cross.filterZ(point) == 0);
 
     before.forEach((cross) => {
-      cross.mesh.material.color = new THREE.Color(0x6c5ce7);
+      cross.mesh.material.opacity = 0.2;
+      cross.mesh.material.color = new THREE.Color(0x454);
     });
 
     after.forEach((cross) => {
       cross.mesh.material.color = new THREE.Color(0xffffff);
+      cross.mesh.material.opacity = 1;
     });
 
     inCrosses.forEach((cross) => {
       cross.mesh.material.color = new THREE.Color(0x00ff00);
+      cross.mesh.material.opacity = 1;
     });
   }
 }
