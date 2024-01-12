@@ -38,6 +38,8 @@ export class Scene {
     document.body.appendChild(this.renderer.domElement);
 
     this.scene.add(Cursor.instance.cursor);
+    this.scene.add(Cursor.instance.pointLight);
+
     this.renderer.setAnimationLoop(Utils.animate);
   }
 

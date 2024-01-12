@@ -158,9 +158,7 @@ export class Cross {
     localCenter.x = (boundingBox.max.x + boundingBox.min.x) / 2;
     localCenter.y = (boundingBox.max.y + boundingBox.min.y) / 2;
     localCenter.z = (boundingBox.max.z + boundingBox.min.z) / 2;
-    console.log(localCenter);
     this.mesh.localToWorld(localCenter);
-    console.log(localCenter);
     return localCenter;
   }
 

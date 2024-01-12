@@ -22,10 +22,15 @@ export class Cursor {
   /** @type {THREE.Mesh} */
   cursor;
 
+  /** @type {THREE.PointLight} */
+  pointLight;
+
   static INITIAL_CURSOR_POSITION = new THREE.Vector3(0, 0, -15);
 
   constructor() {
     this.initCursor();
+    this.pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+    this.updateLightPosition();
   }
 
   get centerPosition() {
@@ -59,9 +64,18 @@ export class Cursor {
     const newPosition = new THREE.Vector3(x, y, z);
     if (Utils.isOnScreen(newPosition)) {
       this.cursor.position.set(x, y, z);
+      this.updateLightPosition();
       return true;
     }
     return false;
+  }
+
+  updateLightPosition() {
+    this.pointLight.position.set(
+      this.centerPosition.x,
+      this.centerPosition.y,
+      this.centerPosition.z
+    );
   }
 
   /**
@@ -78,6 +92,8 @@ export class Cursor {
       this.cursor.position.x += x;
       this.cursor.position.y += y;
       this.cursor.position.z += z;
+      this.updateLightPosition();
+
       return true;
     }
     return false;
