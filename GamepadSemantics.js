@@ -77,7 +77,7 @@ export class GamepadSemantics {
         axesValues.z * speed.z
       );
       if (moved && axesValues.z != null) {
-        Scene.instance.onCursorPositionChange(Cursor.instance.centerPosition);
+        Scene.instance.onCursorPositionChange(Cursor.instance.position);
       }
     }
   }

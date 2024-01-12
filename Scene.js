@@ -38,6 +38,8 @@ export class Scene {
     document.body.appendChild(this.renderer.domElement);
 
     this.scene.add(Cursor.instance.cursor);
+    this.scene.add(Cursor.instance.pointLight);
+
     this.renderer.setAnimationLoop(Utils.animate);
   }
 
@@ -87,8 +89,11 @@ export class Scene {
    * @param {Cross[]} crosses
    */
   _addCrosses(crosses) {
-    this.scene.add(...crosses.map((cross) => cross.mesh));
+    const meshs = crosses.map((cross) => cross.mesh);
+    this.scene.add(...meshs);
+
     this.crosses = crosses;
+    this.onCursorPositionChange(Cursor.INITIAL_CURSOR_POSITION);
   }
 
   regenerateCrosses() {
@@ -106,7 +111,7 @@ export class Scene {
 
     before.forEach((cross) => {
       cross.mesh.material.opacity = 0.2;
-      cross.mesh.material.color = new THREE.Color(0x454);
+      cross.mesh.material.color = new THREE.Color(0xffffff);
     });
 
     after.forEach((cross) => {
@@ -115,8 +120,13 @@ export class Scene {
     });
 
     inCrosses.forEach((cross) => {
-      cross.mesh.material.color = new THREE.Color(0x00ff00);
-      cross.mesh.material.opacity = 1;
+      if (cross.isInside(point)) {
+        cross.mesh.material.color = new THREE.Color(0x00b894);
+        cross.mesh.material.opacity = 1;
+      } else {
+        cross.mesh.material.color = new THREE.Color(0x81ecec);
+        cross.mesh.material.opacity = 1;
+      }
     });
   }
 }

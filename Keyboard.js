@@ -66,7 +66,7 @@ export class Keyboard {
         this._events.z * Keyboard.DEFAULT_SPEED * speed.z
       );
       if (moved && this._events.z != null) {
-        Scene.instance.onCursorPositionChange(Cursor.instance.centerPosition);
+        Scene.instance.onCursorPositionChange(Cursor.instance.position);
       }
       this._events.x = 0;
       this._events.y = 0;
