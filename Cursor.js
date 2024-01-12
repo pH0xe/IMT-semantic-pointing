@@ -26,6 +26,9 @@ export class Cursor {
   pointLight;
 
   static INITIAL_CURSOR_POSITION = new THREE.Vector3(0, 0, -15);
+  static CURSOR_RADIUS = 1;
+  static CURSOR_HEIGHT = 3;
+  static CURSOR_SEGMENTS = 4;
 
   constructor() {
     this.initCursor();
@@ -33,19 +36,16 @@ export class Cursor {
     this.updateLightPosition();
   }
 
-  get centerPosition() {
-    this.cursor.geometry.computeBoundingBox();
-    const boundingBox = this.cursor.geometry.boundingBox;
-    const center = new THREE.Vector3();
-    center.x = (boundingBox.max.x + boundingBox.min.x) / 2;
-    center.y = (boundingBox.max.y + boundingBox.min.y) / 2;
-    center.z = (boundingBox.max.z + boundingBox.min.z) / 2;
-    this.cursor.localToWorld(center);
-    return center;
+  get position() {
+    return this.cursor.position;
   }
 
   initCursor() {
-    const geometry = new THREE.ConeGeometry(1, 3, 4);
+    const geometry = new THREE.ConeGeometry(
+      Cursor.CURSOR_RADIUS,
+      Cursor.CURSOR_HEIGHT,
+      Cursor.CURSOR_SEGMENTS
+    );
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     this.cursor = new THREE.Mesh(geometry, material);
     this.cursor.position.set(
@@ -72,9 +72,9 @@ export class Cursor {
 
   updateLightPosition() {
     this.pointLight.position.set(
-      this.centerPosition.x,
-      this.centerPosition.y,
-      this.centerPosition.z
+      this.position.x,
+      this.position.y,
+      this.position.z
     );
   }
 

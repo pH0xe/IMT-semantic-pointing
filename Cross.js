@@ -2,39 +2,41 @@ import * as THREE from "three";
 
 export class Cross {
   static DEPTH = 0.5;
-  static FRONT = 1;
+  static WIDTH = 3;
+  static HEIGHT = 5;
+  static FRONT = 0;
   static REAR = Cross.FRONT - Cross.DEPTH;
 
   static CROSS_COORDS = [
     [
-      [3, 6],
-      [2, 1],
-      [3, 1],
-    ],
-    [
-      [2, 6],
-      [2, 1],
-      [3, 6],
-    ],
-    [
       [2, 5],
-      [1, 5],
-      [2, 4],
+      [1, 0],
+      [2, 0],
     ],
     [
-      [2, 4],
       [1, 5],
+      [1, 0],
+      [2, 5],
+    ],
+    [
       [1, 4],
+      [0, 4],
+      [1, 3],
     ],
     [
-      [4, 4],
-      [3, 5],
+      [1, 3],
+      [0, 4],
+      [0, 3],
+    ],
+    [
+      [3, 3],
+      [2, 4],
+      [2, 3],
+    ],
+    [
       [3, 4],
-    ],
-    [
-      [4, 5],
-      [3, 5],
-      [4, 4],
+      [2, 4],
+      [3, 3],
     ],
   ];
 
@@ -74,77 +76,77 @@ export class Cross {
     return new Float32Array([
       ...Cross.FRONT_CROSS_COORDS,
       ...Cross.BACK_CROSS_COORDS,
-      ...[...[3, 4, Cross.REAR], ...[3, 1, Cross.FRONT], ...[3, 1, Cross.REAR]],
+      ...[...[2, 3, Cross.REAR], ...[2, 0, Cross.FRONT], ...[2, 0, Cross.REAR]],
+      ...[
+        ...[2, 3, Cross.REAR],
+        ...[2, 3, Cross.FRONT],
+        ...[2, 0, Cross.FRONT],
+      ],
+      ...[...[2, 3, Cross.REAR], ...[3, 3, Cross.REAR], ...[3, 3, Cross.FRONT]],
+      ...[
+        ...[2, 3, Cross.REAR],
+        ...[3, 3, Cross.FRONT],
+        ...[2, 3, Cross.FRONT],
+      ],
       ...[
         ...[3, 4, Cross.REAR],
         ...[3, 4, Cross.FRONT],
-        ...[3, 1, Cross.FRONT],
+        ...[3, 3, Cross.FRONT],
       ],
-      ...[...[3, 4, Cross.REAR], ...[4, 4, Cross.REAR], ...[4, 4, Cross.FRONT]],
+      ...[...[3, 4, Cross.REAR], ...[3, 3, Cross.FRONT], ...[3, 3, Cross.REAR]],
+      ...[...[2, 4, Cross.REAR], ...[3, 4, Cross.FRONT], ...[3, 4, Cross.REAR]],
       ...[
-        ...[3, 4, Cross.REAR],
-        ...[4, 4, Cross.FRONT],
+        ...[2, 4, Cross.REAR],
+        ...[2, 4, Cross.FRONT],
         ...[3, 4, Cross.FRONT],
       ],
+      ...[...[2, 5, Cross.REAR], ...[2, 4, Cross.FRONT], ...[2, 4, Cross.REAR]],
       ...[
-        ...[4, 5, Cross.REAR],
-        ...[4, 5, Cross.FRONT],
-        ...[4, 4, Cross.FRONT],
-      ],
-      ...[...[4, 5, Cross.REAR], ...[4, 4, Cross.FRONT], ...[4, 4, Cross.REAR]],
-      ...[...[3, 5, Cross.REAR], ...[4, 5, Cross.FRONT], ...[4, 5, Cross.REAR]],
-      ...[
-        ...[3, 5, Cross.REAR],
-        ...[3, 5, Cross.FRONT],
-        ...[4, 5, Cross.FRONT],
-      ],
-      ...[...[3, 6, Cross.REAR], ...[3, 5, Cross.FRONT], ...[3, 5, Cross.REAR]],
-      ...[
-        ...[3, 6, Cross.REAR],
-        ...[3, 6, Cross.FRONT],
-        ...[3, 5, Cross.FRONT],
-      ],
-      ...[
-        ...[3, 6, Cross.REAR],
-        ...[2, 6, Cross.FRONT],
-        ...[3, 6, Cross.FRONT],
-      ],
-      ...[...[3, 6, Cross.REAR], ...[2, 6, Cross.REAR], ...[2, 6, Cross.FRONT]],
-      ...[...[2, 6, Cross.FRONT], ...[2, 6, Cross.REAR], ...[2, 5, Cross.REAR]],
-      ...[
-        ...[2, 6, Cross.FRONT],
         ...[2, 5, Cross.REAR],
         ...[2, 5, Cross.FRONT],
+        ...[2, 4, Cross.FRONT],
       ],
-      ...[...[2, 5, Cross.FRONT], ...[2, 5, Cross.REAR], ...[1, 5, Cross.REAR]],
       ...[
-        ...[2, 5, Cross.FRONT],
-        ...[1, 5, Cross.REAR],
+        ...[2, 5, Cross.REAR],
         ...[1, 5, Cross.FRONT],
+        ...[2, 5, Cross.FRONT],
       ],
+      ...[...[2, 5, Cross.REAR], ...[1, 5, Cross.REAR], ...[1, 5, Cross.FRONT]],
       ...[...[1, 5, Cross.FRONT], ...[1, 5, Cross.REAR], ...[1, 4, Cross.REAR]],
       ...[
         ...[1, 5, Cross.FRONT],
         ...[1, 4, Cross.REAR],
         ...[1, 4, Cross.FRONT],
       ],
-      ...[...[1, 4, Cross.FRONT], ...[1, 4, Cross.REAR], ...[2, 4, Cross.REAR]],
+      ...[...[1, 4, Cross.FRONT], ...[1, 4, Cross.REAR], ...[0, 4, Cross.REAR]],
       ...[
         ...[1, 4, Cross.FRONT],
-        ...[2, 4, Cross.REAR],
-        ...[2, 4, Cross.FRONT],
+        ...[0, 4, Cross.REAR],
+        ...[0, 4, Cross.FRONT],
       ],
-      ...[...[2, 4, Cross.FRONT], ...[2, 4, Cross.REAR], ...[2, 1, Cross.REAR]],
+      ...[...[0, 4, Cross.FRONT], ...[0, 4, Cross.REAR], ...[0, 3, Cross.REAR]],
       ...[
-        ...[2, 4, Cross.FRONT],
-        ...[2, 1, Cross.REAR],
-        ...[2, 1, Cross.FRONT],
+        ...[0, 4, Cross.FRONT],
+        ...[0, 3, Cross.REAR],
+        ...[0, 3, Cross.FRONT],
       ],
-      ...[...[2, 1, Cross.FRONT], ...[2, 1, Cross.REAR], ...[3, 1, Cross.REAR]],
+      ...[...[0, 3, Cross.FRONT], ...[0, 3, Cross.REAR], ...[1, 3, Cross.REAR]],
       ...[
-        ...[2, 1, Cross.FRONT],
-        ...[3, 1, Cross.REAR],
-        ...[3, 1, Cross.FRONT],
+        ...[0, 3, Cross.FRONT],
+        ...[1, 3, Cross.REAR],
+        ...[1, 3, Cross.FRONT],
+      ],
+      ...[...[1, 3, Cross.FRONT], ...[1, 3, Cross.REAR], ...[1, 0, Cross.REAR]],
+      ...[
+        ...[1, 3, Cross.FRONT],
+        ...[1, 0, Cross.REAR],
+        ...[1, 0, Cross.FRONT],
+      ],
+      ...[...[1, 0, Cross.FRONT], ...[1, 0, Cross.REAR], ...[2, 0, Cross.REAR]],
+      ...[
+        ...[1, 0, Cross.FRONT],
+        ...[2, 0, Cross.REAR],
+        ...[2, 0, Cross.FRONT],
       ],
     ]);
   }
@@ -153,13 +155,12 @@ export class Cross {
    * return the coordinates of the center of the cross (not just the position of the mesh), using a bounding box
    */
   get position() {
-    const localCenter = new THREE.Vector3();
-    const boundingBox = this.mesh.geometry.boundingBox;
-    localCenter.x = (boundingBox.max.x + boundingBox.min.x) / 2;
-    localCenter.y = (boundingBox.max.y + boundingBox.min.y) / 2;
-    localCenter.z = (boundingBox.max.z + boundingBox.min.z) / 2;
-    this.mesh.localToWorld(localCenter);
-    return localCenter;
+    const center = new THREE.Vector3();
+
+    center.x = this.mesh.position.x + Cross.WIDTH / 2;
+    center.y = this.mesh.position.y + Cross.HEIGHT / 2;
+    center.z = this.mesh.position.z - Cross.DEPTH / 2;
+    return center;
   }
 
   /**
@@ -192,10 +193,8 @@ export class Cross {
    * @returns {-1 | 0 | 1} -1 if point is before, 0 if point is inside, 1 if point is after
    */
   filterZ(point) {
-    const boundingBox = this.mesh.geometry.boundingBox;
-    const depth = (boundingBox.max.z + boundingBox.min.z) / 2;
-    const maxZ = this.position.z + depth;
-    const minZ = this.position.z - depth;
+    const maxZ = this.position.z + Cross.DEPTH / 2;
+    const minZ = this.position.z - Cross.DEPTH / 2;
 
     if (point.z < minZ) {
       return -1;
@@ -217,15 +216,11 @@ export class Cross {
    * @param {THREE.Vector3} point
    */
   isInside(point) {
-    const boundingBox = this.mesh.geometry.boundingBox;
-    const height = (boundingBox.max.y + boundingBox.min.y) / 2;
-    const width = (boundingBox.max.x + boundingBox.min.x) / 2;
+    const maxX = this.position.x + Cross.WIDTH / 2;
+    const minX = this.position.x - Cross.WIDTH / 2;
 
-    const maxX = this.position.x + width;
-    const minX = this.position.x - width;
-
-    const maxY = this.position.y + height;
-    const minY = this.position.y - height;
+    const maxY = this.position.y + Cross.HEIGHT / 2;
+    const minY = this.position.y - Cross.HEIGHT / 2;
 
     return (
       point.x <= maxX &&
