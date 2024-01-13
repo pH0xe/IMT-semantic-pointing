@@ -69,6 +69,7 @@ export class Cross {
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.position.set(translate.x, translate.y, translate.z);
     this.mesh.geometry.computeBoundingBox();
+    this.mesh.castShadow = true;
   }
 
   /** @returns {Float32Array} */
