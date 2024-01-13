@@ -34,6 +34,7 @@ export class Scene {
     this.initRenderer();
     this.initCamera();
     this.initLight();
+    this.initFloor();
     this.initCrosses();
     document.body.appendChild(this.renderer.domElement);
 
@@ -50,6 +51,8 @@ export class Scene {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setClearColor("#233143");
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
   initCamera() {
@@ -62,12 +65,36 @@ export class Scene {
   }
 
   initLight() {
-    const light = new THREE.AmbientLight(0xffffff, 1);
-    this.scene.add(light);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+    this.scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 50_000;
+    directionalLight.shadow.mapSize.height = 50_000;
+
+    directionalLight.shadow.camera.near = -100;
+    directionalLight.shadow.camera.far = 100;
+    directionalLight.shadow.camera.left = -100;
+    directionalLight.shadow.camera.right = 100;
+    directionalLight.shadow.camera.bottom = 10;
+    directionalLight.shadow.camera.top = 100;
+
+    this.scene.add(directionalLight);
   }
 
   initCrosses() {
     this._addCrosses(Utils.generateCrosses(10));
+  }
+
+  initFloor() {
+    const geometry = new THREE.PlaneGeometry(1_000, 1_000);
+    const material = new THREE.MeshStandardMaterial({color: 0xffffff});
+    const plane = new THREE.Mesh(geometry, material);
+    plane.receiveShadow = true;
+    plane.position.set(0, -60, -500);
+    plane.rotation.set(-Math.PI / 2, 0, 0);
+    this.scene.add(plane);
   }
 
   onWindowResize() {
