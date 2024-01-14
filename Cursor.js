@@ -32,7 +32,7 @@ export class Cursor {
 
   constructor() {
     this.initCursor();
-    this.pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+    this.pointLight = new THREE.PointLight(0xffff00, 30, 100);
     this.updateLightPosition();
   }
 
@@ -48,6 +48,7 @@ export class Cursor {
     );
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     this.cursor = new THREE.Mesh(geometry, material);
+    this.cursor.castShadow = true;
     this.cursor.position.set(
       Cursor.INITIAL_CURSOR_POSITION.x,
       Cursor.INITIAL_CURSOR_POSITION.y,

@@ -33,22 +33,22 @@ export class Keyboard {
     const key = event.key;
     switch (key) {
       case Keyboard.UP:
-        this._events.y = 1;
+        this._events.y = 10;
         break;
       case Keyboard.DOWN:
-        this._events.y = -1;
+        this._events.y = -10;
         break;
       case Keyboard.LEFT:
-        this._events.x = -1;
+        this._events.x = -10;
         break;
       case Keyboard.RIGHT:
-        this._events.x = 1;
+        this._events.x = 10;
         break;
       case Keyboard.FORWARD:
-        this._events.z = -1;
+        this._events.z = -10;
         break;
       case Keyboard.BACKWARD:
-        this._events.z = 1;
+        this._events.z = 10;
         break;
     }
   }
