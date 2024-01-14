@@ -62,9 +62,26 @@ export class Cursor {
    * @param {number} z New z position
    */
   updateCursorPosition(x, y, z) {
-    const newPosition = new THREE.Vector3(x, y, z);
-    if (Utils.isOnScreen(newPosition)) {
-      this.cursor.position.set(x, y, z);
+    const p2 = new THREE.Vector3(
+      x + Cursor.CURSOR_RADIUS,
+      y + Cursor.CURSOR_HEIGHT / 2,
+      z + Cursor.CURSOR_RADIUS
+    );
+    const p1 = new THREE.Vector3(
+      x - Cursor.CURSOR_RADIUS,
+      y - Cursor.CURSOR_HEIGHT / 2,
+      z - Cursor.CURSOR_RADIUS
+    );
+
+    const isInScene = Utils.isInScene(p1, p2);
+
+    if (isInScene.x || isInScene.y || isInScene.z) {
+      const oldPosition = this.cursor.position.clone();
+      this.cursor.position.set(
+        isInScene.x ? x : oldPosition.x,
+        isInScene.y ? y : oldPosition.y,
+        isInScene.z ? z : oldPosition.z
+      );
       this.updateLightPosition();
       return true;
     }
@@ -89,10 +106,30 @@ export class Cursor {
     newPosition.x += x;
     newPosition.y += y;
     newPosition.z += z;
-    if (Utils.isOnScreen(newPosition)) {
-      this.cursor.position.x += x;
-      this.cursor.position.y += y;
-      this.cursor.position.z += z;
+
+    const p2 = new THREE.Vector3(
+      newPosition.x + Cursor.CURSOR_RADIUS,
+      newPosition.y + Cursor.CURSOR_HEIGHT / 2,
+      newPosition.z + Cursor.CURSOR_RADIUS
+    );
+    const p1 = new THREE.Vector3(
+      newPosition.x - Cursor.CURSOR_RADIUS,
+      newPosition.y - Cursor.CURSOR_HEIGHT / 2,
+      newPosition.z - Cursor.CURSOR_RADIUS
+    );
+
+    const isInScene = Utils.isInScene(p1, p2);
+
+    if (isInScene.x || isInScene.y || isInScene.z) {
+      if (isInScene.x) {
+        this.cursor.position.x += x;
+      }
+      if (isInScene.y) {
+        this.cursor.position.y += y;
+      }
+      if (isInScene.z) {
+        this.cursor.position.z += z;
+      }
       this.updateLightPosition();
 
       return true;

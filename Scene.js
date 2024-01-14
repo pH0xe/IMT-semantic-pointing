@@ -29,6 +29,12 @@ export class Scene {
     return this._instance;
   }
 
+  static FLOOR_Y = -10;
+  static BACK_WALL_Z = -110;
+  static LEFT_WALL_X = -100;
+  static RIGHT_WALL_X = 100;
+  static CEILING_Y = 70;
+
   constructor() {
     this.scene = new THREE.Scene();
     this.initRenderer();
@@ -144,51 +150,51 @@ export class Scene {
 
   initFloor() {
     const geometry = new THREE.PlaneGeometry(200, 110);
-    const material = new THREE.MeshStandardMaterial({color: 0xeeeeee});
+    const material = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
     const plane = new THREE.Mesh(geometry, material);
     plane.receiveShadow = true;
-    plane.position.set(0, -10, -55);
+    plane.position.set(0, Scene.FLOOR_Y, -55);
     plane.rotation.set(-Math.PI / 2, 0, 0);
     this.scene.add(plane);
   }
 
   initBackWall() {
     const geometry = new THREE.PlaneGeometry(200, 80);
-    const material = new THREE.MeshStandardMaterial({color: 0x0055aa});
+    const material = new THREE.MeshStandardMaterial({ color: 0x0055aa });
     const plane = new THREE.Mesh(geometry, material);
     plane.receiveShadow = true;
-    plane.position.set(0, 30, -110);
+    plane.position.set(0, 30, Scene.BACK_WALL_Z);
     this.scene.add(plane);
   }
 
   initLeftWall() {
     const geometry = new THREE.PlaneGeometry(110, 80);
-    const material = new THREE.MeshStandardMaterial({color: 0x33bbff});
+    const material = new THREE.MeshStandardMaterial({ color: 0x33bbff });
 
     const leftWall = new THREE.Mesh(geometry, material);
     leftWall.receiveShadow = true;
-    leftWall.position.set(-100, 30, -55);
+    leftWall.position.set(Scene.LEFT_WALL_X, 30, -55);
     leftWall.rotation.set(0, Math.PI / 2, 0);
     this.scene.add(leftWall);
   }
 
   initRightWall() {
     const geometry = new THREE.PlaneGeometry(110, 80);
-    const material = new THREE.MeshStandardMaterial({color: 0x33bbff});
+    const material = new THREE.MeshStandardMaterial({ color: 0x33bbff });
 
     const rightWall = new THREE.Mesh(geometry, material);
     rightWall.receiveShadow = true;
-    rightWall.position.set(100, 30, -55);
+    rightWall.position.set(Scene.RIGHT_WALL_X, 30, -55);
     rightWall.rotation.set(0, -Math.PI / 2, 0);
     this.scene.add(rightWall);
   }
 
   initCeiling() {
     const geometry = new THREE.PlaneGeometry(200, 110);
-    const material = new THREE.MeshStandardMaterial({color: 0xeeeeee});
+    const material = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
     const plane = new THREE.Mesh(geometry, material);
     plane.receiveShadow = true;
-    plane.position.set(0, 70, -55);
+    plane.position.set(0, Scene.CEILING_Y, -55);
     plane.rotation.set(Math.PI / 2, 0, 0);
     this.scene.add(plane);
   }
