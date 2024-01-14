@@ -40,17 +40,17 @@ export class Utils {
 
   // To test parameters
   // https://www.geogebra.org/m/smy7cmzg
-  static minSpeed = 0.015;
-  static curveFlateness = 30;
+  static minSpeed = 0.005;
+  static curveFlateness = 15;
   static gapShape = 1;
-  static gapWidth = 0.5;
+  static gapWidth = 0.25;
 
-  static speed(distance) {
+  static speed() {
     if (this.semanticPointigEnabled) {
       return (
         Utils.minSpeed +
-        Math.log(1 + distance ** (2 * Utils.gapShape) / Utils.gapWidth) /
-          Math.log(10 ** Utils.curveFlateness)
+        Math.log(1 + Utils.minDistance() ** (2 * Utils.gapShape) / 10 ** Utils.gapWidth) /
+          Utils.curveFlateness
       );
     } else {
       return this.defaultSpeed;
@@ -58,22 +58,15 @@ export class Utils {
   }
 
   static minDistance() {
-    const distances = Scene.instance.crosses.map((cross) =>
-      cross.position.clone().sub(Cursor.instance.cursor.position)
-    );
-    return distances.reduce(
-      (minDistance, distance) =>
-        distance.length() < minDistance.length() ? distance : minDistance,
-      new THREE.Vector3(Infinity, Infinity, Infinity)
-    );
+    const distances = Scene.instance.crosses
+      .map(cross => cross.position.clone())
+      .map(position => position.sub(Cursor.instance.cursor.position).length());
+
+    return Math.min(...distances);
   }
 
-  static speedPerAxis() {
-    return new THREE.Vector3(
-      ...Utils.minDistance()
-        .toArray()
-        .map((distance) => Utils.speed(distance))
-    );
+  static speedVector() {
+    return new THREE.Vector3(Utils.speed(), Utils.speed(), Utils.speed());
   }
 
   /**
@@ -127,11 +120,6 @@ export class Utils {
     );
     btnSemanticPointig.addEventListener("change", () => {
       this.semanticPointigEnabled = btnSemanticPointig.checked;
-    });
-
-    const btnTitoubiz = document.getElementById("btn-titoubiz");
-    btnTitoubiz.addEventListener("click", () => {
-      alert("Je suis une brique !!!!!!");
     });
 
     const btnSwitchAxe = document.getElementById("btn-axez");
