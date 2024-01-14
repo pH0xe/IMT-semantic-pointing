@@ -40,16 +40,18 @@ export class Utils {
 
   // To test parameters
   // https://www.geogebra.org/m/smy7cmzg
-  static minSpeed = 0.005;
+  static minSpeed = 0.01;
   static curveFlateness = 15;
   static gapShape = 1;
-  static gapWidth = 0.25;
+  static gapWidth = 1;
 
   static speed() {
     if (this.semanticPointigEnabled) {
       return (
         Utils.minSpeed +
-        Math.log(1 + Utils.minDistance() ** (2 * Utils.gapShape) / 10 ** Utils.gapWidth) /
+        Math.log(
+          1 + Utils.minDistance() ** (2 * Utils.gapShape) / 10 ** Utils.gapWidth
+        ) /
           Utils.curveFlateness
       );
     } else {
@@ -59,8 +61,10 @@ export class Utils {
 
   static minDistance() {
     const distances = Scene.instance.crosses
-      .map(cross => cross.position.clone())
-      .map(position => position.sub(Cursor.instance.cursor.position).length());
+      .map((cross) => cross.position.clone())
+      .map((position) =>
+        position.sub(Cursor.instance.cursor.position).length()
+      );
 
     return Math.min(...distances);
   }
