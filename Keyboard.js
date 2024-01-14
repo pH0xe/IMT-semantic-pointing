@@ -59,7 +59,7 @@ export class Keyboard {
       const distances = crosses.map((cross) =>
         cross.getDistance(Cursor.instance.cursor.position)
       );
-      const speed = Utils.speedPerAxis(distances);
+      const speed = Utils.speedVector();
       const moved = Cursor.instance.translateCursor(
         this._events.x * Keyboard.DEFAULT_SPEED * speed.x,
         this._events.y * Keyboard.DEFAULT_SPEED * speed.y,

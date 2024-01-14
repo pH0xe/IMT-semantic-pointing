@@ -69,7 +69,7 @@ export class GamepadSemantics {
       (axesValues.y != null) |
       (axesValues.z != null)
     ) {
-      const speed = Utils.speedPerAxis();
+      const speed = Utils.speedVector();
 
       const moved = Cursor.instance.translateCursor(
         axesValues.x * speed.x,
