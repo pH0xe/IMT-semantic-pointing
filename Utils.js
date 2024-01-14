@@ -40,7 +40,7 @@ export class Utils {
 
   // To test parameters
   // https://www.geogebra.org/m/smy7cmzg
-  static minSpeed = 0.01;
+  static minSpeed = 0.015;
   static curveFlateness = 30;
   static gapShape = 1;
   static gapWidth = 0.5;
