@@ -40,37 +40,51 @@ export class Utils {
 
   // To test parameters
   // https://www.geogebra.org/m/smy7cmzg
-  static minSpeed = 0.01;
-  static curveFlateness = 15;
+  static minSpeed = 0.02;
+  static curveFlateness = 30;
   static gapShape = 1;
-  static gapWidth = 1;
+  static gapWidth = 0.25;
 
-  static speed() {
+  static speed(distanceVector, distance) {
     if (this.semanticPointigEnabled) {
-      return (
+      let speed =
         Utils.minSpeed +
-        Math.log(
-          1 + Utils.minDistance() ** (2 * Utils.gapShape) / 10 ** Utils.gapWidth
-        ) /
-          Utils.curveFlateness
-      );
+        Math.log(1 + distanceVector ** (2 * Utils.gapShape) / Utils.gapWidth) /
+          Math.log(10 ** Utils.curveFlateness);
+
+      // on pondére la vitesse sur cette axe par la distance, plus on est loin plus on va vite
+      speed = speed * distance * 0.25;
+      if (speed > this.defaultSpeed) {
+        return this.defaultSpeed;
+      }
+      if (speed < this.minSpeed) {
+        return this.minSpeed;
+      }
+      return speed;
     } else {
       return this.defaultSpeed;
     }
   }
 
   static minDistance() {
-    const distances = Scene.instance.crosses
+    const distancesVectors = Scene.instance.crosses
       .map((cross) => cross.position.clone())
-      .map((position) =>
-        position.sub(Cursor.instance.cursor.position).length()
-      );
+      .map((position) => position.sub(Cursor.instance.cursor.position));
 
-    return Math.min(...distances);
+    const minDistance = distancesVectors.reduce(
+      (minDistance, distance) =>
+        distance.length() < minDistance.length() ? distance : minDistance,
+      new THREE.Vector3(Infinity, Infinity, Infinity)
+    );
+
+    return { vector: minDistance, distance: minDistance.length() };
   }
 
   static speedVector() {
-    return new THREE.Vector3(Utils.speed(), Utils.speed(), Utils.speed());
+    const { vector, distance } = Utils.minDistance();
+    return new THREE.Vector3(
+      ...vector.toArray().map((dv) => Utils.speed(dv, distance))
+    );
   }
 
   /**
