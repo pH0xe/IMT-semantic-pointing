@@ -31,17 +31,17 @@ Si vous souhaitez compiler le projet, il est possible de le faire avec la comman
 ### Contrôles
 
 - La manipulation du pointeur 3D se fait de 2 manières :
-  - Avec un gamepad (manette de jeu) : Le joystick gauche permet de déplacer le pointeur dans le plan XY, le joystick droit permet de déplacer le pointeur dans le plan Z.
-  - Avec le clavier : Les touches ZQSD permettent de déplacer le pointeur dans le plan XY, les touches A et E permettent de déplacer le pointeur dans le plan Z.
+  - Avec un gamepad (manette de jeu) : le joystick gauche permet de déplacer le pointeur dans le plan XY, le joystick droit permet de déplacer le pointeur sur l’axe Z.
+  - Avec le clavier : les touches ZQSD permettent de déplacer le pointeur dans le plan XY, les touches A et E permettent de déplacer le pointeur sur l’axe Z.
     La manette de jeu est recommandée pour une meilleure expérience.
-    Le prototype a été testé avec une manette de Xbox One, le fonctionnement n'est pas garantit avec d'autre manette.
+    Le prototype a été testé avec une manette de Xbox One, le fonctionnement n'est pas garanti avec d'autres manettes.
 
 ### Interface
 
 L'interface est composée de 2 parties :
 
 - Un encart en haut a gauche permettant plusieurs action :
-  - <kbd>Régénérer les formes</kbd> : Regénéner des formes dans la scène (Cela supprime les formes existantes).
-  - <kbd>Inverser l'axe de profondeur</kbd> : Inverser l'axe du joystick pour la profondeur. Sous certain navigateur (Firefox ESR), les gamepad ne sont pas gérés correctement. Si c'est le cas il est nécéssaire d'inverser l'axe du joystick pour la profondeur.
+  - <kbd>Régénérer les formes</kbd> : Regénéner des formes dans la scène (cela supprime les formes existantes).
+  - <kbd>Inverser l'axe de profondeur</kbd> : Inverser l'axe du joystick pour la profondeur. Sous certains navigateurs (Firefox ESR), les gamepads ne sont pas gérés correctement. Si c'est le cas, il est nécéssaire d'inverser l'axe du joystick pour la profondeur.
   - <kbd>Pointage sémantique</kbd> : Activer ou désactiver le pointage sémantique.
 - La scène 3D, composée de 3 plans (XY, XZ, YZ) et de formes géométriques (Croix). Les formes géométriques sont générées aléatoirement à chaque chargement de la page, ou avec le bouton "Régénérer les formes". Le nombre de formes générées est défini dans le fichier `src/scene.ts`. Il est possible de modifier ce nombre.
