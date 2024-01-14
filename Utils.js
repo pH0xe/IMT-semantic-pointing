@@ -11,17 +11,28 @@ export class Utils {
   }
 
   /**
-   * @param {THREE.Vector3} point
+   * @param {THREE.Vector3} point1
+   * @param {THREE.Vector3} point2
+   * @returns {{x: boolean, y: boolean, z: boolean}}
    */
-  static isOnScreen(point) {
-    const frustum = new THREE.Frustum();
-    frustum.setFromProjectionMatrix(
-      new THREE.Matrix4().multiplyMatrices(
-        Scene.instance.camera.projectionMatrix,
-        Scene.instance.camera.matrixWorldInverse
-      )
-    );
-    return frustum.containsPoint(point);
+  static isInScene(point1, point2) {
+    const x =
+      point1.x >= Scene.LEFT_WALL_X &&
+      point1.x <= Scene.RIGHT_WALL_X &&
+      point2.x >= Scene.LEFT_WALL_X &&
+      point2.x <= Scene.RIGHT_WALL_X;
+    const y =
+      point1.y >= Scene.FLOOR_Y &&
+      point1.y <= Scene.CEILING_Y &&
+      point2.y >= Scene.FLOOR_Y &&
+      point2.y <= Scene.CEILING_Y;
+    const z =
+      point1.z >= Scene.BACK_WALL_Z &&
+      point1.z <= -10 &&
+      point2.z >= Scene.BACK_WALL_Z &&
+      point2.z <= -10;
+
+    return { x, y, z };
   }
 
   static semanticPointigEnabled = true;
