@@ -45,14 +45,20 @@ export class Utils {
   static gapShape = 1;
   static gapWidth = 0.25;
 
-  static speed(distanceVector, distance) {
+  /**
+   *
+   * @param {THREE.Vector3} axisDistance La distance entre le curseur et la forme sur un axe
+   * @param {number} distance La distance entre le curseur et la forme tout axe confondu
+   * @returns {number} la vitesse de déplacement sur un axe
+   */
+  static speed(axisDistance, distance) {
     if (this.semanticPointigEnabled) {
       let speed =
         Utils.minSpeed +
-        Math.log(1 + distanceVector ** (2 * Utils.gapShape) / Utils.gapWidth) /
+        Math.log(1 + axisDistance ** (2 * Utils.gapShape) / Utils.gapWidth) /
           Math.log(10 ** Utils.curveFlateness);
 
-      // on pondére la vitesse sur cette axe par la distance, plus on est loin plus on va vite
+      // on pondère la vitesse sur cette axe par la distance absolue
       speed = speed * distance * 0.25;
       if (speed > this.defaultSpeed) {
         return this.defaultSpeed;
