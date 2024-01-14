@@ -75,7 +75,7 @@ export class Utils {
       const translateZ = Utils.random(-100, -10);
       const translateX = Utils.random(-translateZ, translateZ);
       // plus on est loin plus l'intervalle x et y est grand
-      const translateY = Utils.random(-translateZ / 2, translateZ / 2);
+      const translateY = Utils.random(0, -translateZ / 2);
       crosses.push(
         new Cross(new THREE.Vector3(translateX, translateY, translateZ))
       );

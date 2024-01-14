@@ -35,6 +35,10 @@ export class Scene {
     this.initCamera();
     this.initLight();
     this.initFloor();
+    this.initRightWall();
+    this.initLeftWall();
+    this.initBackWall();
+    this.initCeiling();
     this.initCrosses();
     document.body.appendChild(this.renderer.domElement);
 
@@ -65,22 +69,73 @@ export class Scene {
   }
 
   initLight() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 50_000;
-    directionalLight.shadow.mapSize.height = 50_000;
+    const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    backLight.castShadow = true;
+    backLight.position.set(0, 0, 1);
 
-    directionalLight.shadow.camera.near = -100;
-    directionalLight.shadow.camera.far = 100;
-    directionalLight.shadow.camera.left = -100;
-    directionalLight.shadow.camera.right = 100;
-    directionalLight.shadow.camera.bottom = 10;
-    directionalLight.shadow.camera.top = 100;
+    backLight.shadow.camera.near = 0;
+    backLight.shadow.camera.far = 111;
+    backLight.shadow.camera.left = 100;
+    backLight.shadow.camera.right = -100;
+    backLight.shadow.camera.bottom = -10;
+    backLight.shadow.camera.top = 70;
 
-    this.scene.add(directionalLight);
+    this.scene.add(backLight);
+
+    const leftLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    leftLight.castShadow = true;
+    leftLight.position.set(1, 0, 0);
+
+    leftLight.shadow.camera.near = -100;
+    leftLight.shadow.camera.far = 101;
+    leftLight.shadow.camera.left = 0;
+    leftLight.shadow.camera.right = 110;
+    leftLight.shadow.camera.bottom = -10;
+    leftLight.shadow.camera.top = 70;
+
+    this.scene.add(leftLight);
+
+    const bottomLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    bottomLight.castShadow = true;
+    bottomLight.position.set(0, 1, 0);
+
+    bottomLight.shadow.camera.near = -60;
+    bottomLight.shadow.camera.far = 15;
+    bottomLight.shadow.camera.left = -100;
+    bottomLight.shadow.camera.right = 100;
+    bottomLight.shadow.camera.bottom = 10;
+    bottomLight.shadow.camera.top = 100;
+
+    this.scene.add(bottomLight);
+
+    const rightLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    rightLight.castShadow = true;
+    rightLight.position.set(-1, 0, 0);
+
+    rightLight.shadow.camera.near = -100;
+    rightLight.shadow.camera.far = 101;
+    rightLight.shadow.camera.left = -110;
+    rightLight.shadow.camera.right = 0;
+    rightLight.shadow.camera.bottom = -10;
+    rightLight.shadow.camera.top = 70;
+
+    this.scene.add(rightLight);
+
+    const topLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    topLight.castShadow = true;
+    topLight.position.set(0, -1, 0);
+
+    topLight.shadow.camera.near = -10;
+    topLight.shadow.camera.far = 72;
+    topLight.shadow.camera.left = -100;
+    topLight.shadow.camera.right = 100;
+    topLight.shadow.camera.bottom = -110;
+    topLight.shadow.camera.top = 0;
+
+    this.scene.add(topLight);
   }
 
   initCrosses() {
@@ -88,12 +143,53 @@ export class Scene {
   }
 
   initFloor() {
-    const geometry = new THREE.PlaneGeometry(1_000, 1_000);
-    const material = new THREE.MeshStandardMaterial({color: 0xffffff});
+    const geometry = new THREE.PlaneGeometry(200, 110);
+    const material = new THREE.MeshStandardMaterial({color: 0xeeeeee});
     const plane = new THREE.Mesh(geometry, material);
     plane.receiveShadow = true;
-    plane.position.set(0, -60, -500);
+    plane.position.set(0, -10, -55);
     plane.rotation.set(-Math.PI / 2, 0, 0);
+    this.scene.add(plane);
+  }
+
+  initBackWall() {
+    const geometry = new THREE.PlaneGeometry(200, 80);
+    const material = new THREE.MeshStandardMaterial({color: 0x0055aa});
+    const plane = new THREE.Mesh(geometry, material);
+    plane.receiveShadow = true;
+    plane.position.set(0, 30, -110);
+    this.scene.add(plane);
+  }
+
+  initLeftWall() {
+    const geometry = new THREE.PlaneGeometry(110, 80);
+    const material = new THREE.MeshStandardMaterial({color: 0x33bbff});
+
+    const leftWall = new THREE.Mesh(geometry, material);
+    leftWall.receiveShadow = true;
+    leftWall.position.set(-100, 30, -55);
+    leftWall.rotation.set(0, Math.PI / 2, 0);
+    this.scene.add(leftWall);
+  }
+
+  initRightWall() {
+    const geometry = new THREE.PlaneGeometry(110, 80);
+    const material = new THREE.MeshStandardMaterial({color: 0x33bbff});
+
+    const rightWall = new THREE.Mesh(geometry, material);
+    rightWall.receiveShadow = true;
+    rightWall.position.set(100, 30, -55);
+    rightWall.rotation.set(0, -Math.PI / 2, 0);
+    this.scene.add(rightWall);
+  }
+
+  initCeiling() {
+    const geometry = new THREE.PlaneGeometry(200, 110);
+    const material = new THREE.MeshStandardMaterial({color: 0xeeeeee});
+    const plane = new THREE.Mesh(geometry, material);
+    plane.receiveShadow = true;
+    plane.position.set(0, 70, -55);
+    plane.rotation.set(Math.PI / 2, 0, 0);
     this.scene.add(plane);
   }
 
