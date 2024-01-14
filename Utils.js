@@ -39,11 +39,11 @@ export class Utils {
   static defaultSpeed = 0.1;
 
   // To test parameters
-  // https://www.geogebra.org/calculator/znz4mzve
-  static minSpeed = 0.02;
-  static curveFlateness = 15;
+  // https://www.geogebra.org/m/smy7cmzg
+  static minSpeed = 0.01;
+  static curveFlateness = 30;
   static gapShape = 1;
-  static gapWidth = 1;
+  static gapWidth = 0.5;
 
   static speed(distance) {
     if (this.semanticPointigEnabled) {
